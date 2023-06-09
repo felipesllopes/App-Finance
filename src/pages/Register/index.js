@@ -3,20 +3,15 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput } from "react-nativ
 import firebase from "../../services/firebaseConnection";
 import { AuthContext } from "../../contexts/auth";
 
-export default function Logout() {
+export default function Register() {
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { user } = useContext(AuthContext);
+    const { signUp } = useContext(AuthContext);
 
-    function register() {
-        if (email === '' || password === '' || name === '') {
-            alert("*Preencha os campos*")
-            return;
-        }
-        alert("Usuário Cadastrado")
-        console.log(user.nome)
+    function handleRegister() {
+        signUp(email, password, name)
     }
 
     return (
@@ -50,7 +45,7 @@ export default function Logout() {
                 autoCapitalize="none"
             />
 
-            <TouchableOpacity style={styles.button} onPress={register}>
+            <TouchableOpacity style={styles.button} onPress={handleRegister}>
                 <Text style={styles.textButton}>Cadastrar</Text>
             </TouchableOpacity>
 
