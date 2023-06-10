@@ -1,11 +1,30 @@
-import React, { useContext } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import Header from '../../components/Header';
 import { AuthContext } from '../../contexts/auth';
+import ListHistoric from '../../components/ListHistoric';
 
 export default function Home() {
 
     const { user, signOut } = useContext(AuthContext);
+    const [movies, setMovies] = useState([
+        { key: 1, tipo: 'receita', valor: 1200 },
+        { key: 2, tipo: 'despesa', valor: 400 },
+        { key: 3, tipo: 'despesa', valor: 320 },
+        { key: 4, tipo: 'receita', valor: 100 },
+        { key: 5, tipo: 'receita', valor: 1200 },
+        { key: 6, tipo: 'despesa', valor: 400 },
+        { key: 7, tipo: 'despesa', valor: 320 },
+        { key: 8, tipo: 'receita', valor: 100 },
+        { key: 9, tipo: 'receita', valor: 1200 },
+        { key: 10, tipo: 'despesa', valor: 400 },
+        { key: 11, tipo: 'despesa', valor: 320 },
+        { key: 12, tipo: 'receita', valor: 100 },
+        { key: 13, tipo: 'receita', valor: 1200 },
+        { key: 14, tipo: 'despesa', valor: 400 },
+        { key: 15, tipo: 'despesa', valor: 320 },
+        { key: 16, tipo: 'receita', valor: 100 },
+    ])
 
     return (
         <View style={styles.container}>
@@ -17,8 +36,15 @@ export default function Home() {
 
             <Text style={styles.latestMovies}>Últimas movimentações</Text>
 
-            <View style={styles.box}>
 
+            <View style={styles.box}>
+                <FlatList
+                    style={{ margin: 10 }}
+                    data={movies}
+                    keyExtractor={item => item.key}
+                    renderItem={({ item }) => (<ListHistoric data={item} />)}
+                    showsVerticalScrollIndicator={false}
+                />
             </View>
 
         </View>
