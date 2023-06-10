@@ -1,8 +1,6 @@
-import { useState, useContext } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from "react-native";
-import firebase from "../../services/firebaseConnection";
-import { Image } from "react-native";
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native";
+import { useContext, useState } from "react";
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { AuthContext } from "../../contexts/auth";
 
 export default function Login() {
@@ -70,7 +68,7 @@ const styles = StyleSheet.create({
     textInput: {
         backgroundColor: '#242424',
         height: 55,
-        color: 'white',
+        color: '#FFF',
         fontSize: 18,
         padding: 10,
         borderRadius: 6,
@@ -90,7 +88,7 @@ const styles = StyleSheet.create({
         color: '#363636',
     },
     textAccount: {
-        color: 'white',
+        color: '#FFF',
         fontSize: 16,
         textAlign: 'center',
         marginTop: 15,
