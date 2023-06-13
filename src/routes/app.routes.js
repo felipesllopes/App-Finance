@@ -8,7 +8,7 @@ const AppDrawer = createDrawerNavigator();
 export default function AppRoutes() {
     return (
         <AppDrawer.Navigator
-            useLegacyImplementation={true}
+            useLegacyImplementation={true} // por atualização, é obrigatória a implementação dessa propriedade no Drawer
 
             screenOptions={{
                 drawerActiveTintColor: 'white',
@@ -28,11 +28,11 @@ export default function AppRoutes() {
             }}
         >
 
-            <AppDrawer.Screen name="Home" component={Home} options={{ headerShown: false }} />
+            <AppDrawer.Screen name="Home" component={Home} options={{ headerShown: false, title: 'Início' }} />
 
-            <AppDrawer.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+            <AppDrawer.Screen name="Profile" component={Profile} options={{ headerShown: false, title: 'Perfil' }} />
 
-            <AppDrawer.Screen name="New" component={New} options={{ headerShown: false }} />
+            <AppDrawer.Screen name="New" component={New} options={{ headerShown: false, title: 'Registrar' }} />
 
         </AppDrawer.Navigator>
     )

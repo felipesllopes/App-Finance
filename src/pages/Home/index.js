@@ -1,11 +1,11 @@
+import { format, isPast } from 'date-fns';
 import React, { useContext, useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../../components/Header';
 import ListHistoric from '../../components/ListHistoric';
 import { AuthContext } from '../../contexts/auth';
 import firebase from '../../services/firebaseConnection';
-import { format } from 'date-fns';
 
 export default function Home() {
 
@@ -31,6 +31,7 @@ export default function Home() {
                             key: childItem.key,
                             tipo: childItem.val().tipo,
                             valor: childItem.val().valor,
+                            date: childItem.val().date,
                         }
 
                         setMovies(oldArray => [...oldArray, list].reverse());
@@ -38,6 +39,42 @@ export default function Home() {
                 })
         })();
     }, [])
+
+    function handleDelete(data) {
+
+        if (isPast(new Date(data.date))) {
+            // irá entrar aqui se a data for antiga
+            alert("Você não pode excluir um registro antigo.");
+            return;
+        }
+
+        Alert.alert(
+            'Atenção!',
+            `${data.tipo === 'receita' ? 'Receita' : 'Despesa'} R$${data.valor} - ${data.date}`,
+            [
+                {
+                    text: 'Cancelar',
+                    style: 'cancel'
+                },
+                {
+                    text: 'Excluir',
+                    onPress: () => handleDeleteSucess(data)
+                }
+            ]
+        )
+    }
+
+    async function handleDeleteSucess(data) {
+        await firebase.database().ref('historico').child(uid).child(data.key).remove()
+            .then(async () => {
+                let saldoAtual = balance;
+                data.tipo === 'despesa' ? saldoAtual += parseFloat(data.valor) : saldoAtual -= parseFloat(data.valor);
+
+                await firebase.database().ref('usuario').child(uid)
+                    .child('saldo').set(saldoAtual);
+            })
+            .catch((error) => { console.log(error) })
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -55,7 +92,7 @@ export default function Home() {
                     style={{ margin: 10 }}
                     data={movies}
                     keyExtractor={item => item.key}
-                    renderItem={({ item }) => (<ListHistoric data={item} />)}
+                    renderItem={({ item }) => (<ListHistoric data={item} deleteItem={handleDelete} />)}
                     showsVerticalScrollIndicator={false}
                 />
             </View>

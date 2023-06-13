@@ -1,18 +1,17 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-export default function ListHistoric({ data }) {
+export default function ListHistoric({ data, deleteItem }) {
     return (
-        <SafeAreaView style={styles.container}>
+        <TouchableOpacity style={styles.container} activeOpacity={0.7} onLongPress={() => deleteItem(data)}>
 
             <View style={[styles.box, data.tipo === 'receita' ? { backgroundColor: '#009000' } : { backgroundColor: '#FF0000' }]}>
                 <Ionicons name={data.tipo === 'receita' ? 'arrow-up-sharp' : 'arrow-down'} size={20} color={'#FFF'} />
                 <Text style={styles.text}>{data.tipo}</Text>
             </View>
 
-            <Text style={styles.value}>R$ {data.valor}</Text>
-        </SafeAreaView>
+            <Text style={styles.value}>R$ {data.valor.toFixed(2)}</Text>
+        </TouchableOpacity>
     )
 }
 

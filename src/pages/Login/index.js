@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useContext, useState } from "react";
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { AuthContext } from "../../contexts/auth";
+import { ActivityIndicator } from "react-native";
 
 export default function Login() {
 
@@ -9,10 +10,10 @@ export default function Login() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { signIn } = useContext(AuthContext);
+    const { signIn, loadingAuth } = useContext(AuthContext);
 
     function handleLogin() {
-       signIn(email, password)
+        signIn(email, password)
     }
 
     return (
@@ -41,7 +42,12 @@ export default function Login() {
             />
 
             <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                <Text style={styles.textButton}>Entrar</Text>
+                {loadingAuth ?
+                    (<ActivityIndicator size={20} color={'#FFF'} />
+                    ) : (
+                        <Text style={styles.textButton}>Entrar</Text>
+                    )
+                }
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => navigation.navigate('Logout')}>

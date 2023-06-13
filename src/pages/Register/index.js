@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from "react-native";
-import firebase from "../../services/firebaseConnection";
+import { ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { AuthContext } from "../../contexts/auth";
 
 export default function Register() {
@@ -8,7 +7,7 @@ export default function Register() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { signUp } = useContext(AuthContext);
+    const { signUp, loadingAuth } = useContext(AuthContext);
 
     function handleRegister() {
         signUp(email, password, name)
@@ -46,7 +45,12 @@ export default function Register() {
             />
 
             <TouchableOpacity style={styles.button} onPress={handleRegister}>
-                <Text style={styles.textButton}>Cadastrar</Text>
+                {loadingAuth ?
+                    (<ActivityIndicator size={20} color={'#FFF'} />
+                    ) : (
+                        <Text style={styles.textButton}>Cadastrar</Text>
+                    )
+                }
             </TouchableOpacity>
 
         </View>
