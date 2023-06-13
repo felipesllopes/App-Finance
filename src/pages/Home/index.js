@@ -1,8 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../../components/Header';
-import { AuthContext } from '../../contexts/auth';
 import ListHistoric from '../../components/ListHistoric';
+import { AuthContext } from '../../contexts/auth';
 
 export default function Home() {
 
@@ -27,7 +28,7 @@ export default function Home() {
     ])
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
 
             <Header />
 
@@ -47,7 +48,7 @@ export default function Home() {
                 />
             </View>
 
-        </View>
+        </SafeAreaView>
     )
 }
 

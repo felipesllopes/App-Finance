@@ -32,7 +32,7 @@ export default function AppRoutes() {
 
             <AppDrawer.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
 
-            <AppDrawer.Screen name="New" component={New} />
+            <AppDrawer.Screen name="New" component={New} options={{ headerShown: false }} />
 
         </AppDrawer.Navigator>
     )

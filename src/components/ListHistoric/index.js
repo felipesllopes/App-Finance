@@ -1,9 +1,10 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ListHistoric({ data }) {
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
 
             <View style={[styles.box, data.tipo === 'receita' ? { backgroundColor: '#009000' } : { backgroundColor: '#FF0000' }]}>
                 <Ionicons name={data.tipo === 'receita' ? 'arrow-up-sharp' : 'arrow-down'} size={20} color={'#FFF'} />
@@ -11,7 +12,7 @@ export default function ListHistoric({ data }) {
             </View>
 
             <Text style={styles.value}>R$ {data.valor}</Text>
-        </View>
+        </SafeAreaView>
     )
 }
 

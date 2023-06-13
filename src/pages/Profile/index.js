@@ -1,8 +1,9 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { useContext } from "react";
-import { AuthContext } from "../../contexts/auth";
-import { useNavigation } from "@react-navigation/native"
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../../components/Header";
+import { AuthContext } from "../../contexts/auth";
 
 export default function Profile() {
 
@@ -10,7 +11,7 @@ export default function Profile() {
     const navigation = useNavigation();
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
 
             <Header />
 
@@ -27,7 +28,7 @@ export default function Profile() {
                 <Text style={styles.textButton}>Sair</Text>
             </TouchableOpacity>
 
-        </View>
+        </SafeAreaView>
     )
 }
 
