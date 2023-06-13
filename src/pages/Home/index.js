@@ -1,31 +1,43 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../../components/Header';
 import ListHistoric from '../../components/ListHistoric';
 import { AuthContext } from '../../contexts/auth';
+import firebase from '../../services/firebaseConnection';
+import { format } from 'date-fns';
 
 export default function Home() {
 
-    const { user, signOut } = useContext(AuthContext);
-    const [movies, setMovies] = useState([
-        { key: 1, tipo: 'receita', valor: 1200 },
-        { key: 2, tipo: 'despesa', valor: 400 },
-        { key: 3, tipo: 'despesa', valor: 320 },
-        { key: 4, tipo: 'receita', valor: 100 },
-        { key: 5, tipo: 'receita', valor: 1200 },
-        { key: 6, tipo: 'despesa', valor: 400 },
-        { key: 7, tipo: 'despesa', valor: 320 },
-        { key: 8, tipo: 'receita', valor: 100 },
-        { key: 9, tipo: 'receita', valor: 1200 },
-        { key: 10, tipo: 'despesa', valor: 400 },
-        { key: 11, tipo: 'despesa', valor: 320 },
-        { key: 12, tipo: 'receita', valor: 100 },
-        { key: 13, tipo: 'receita', valor: 1200 },
-        { key: 14, tipo: 'despesa', valor: 400 },
-        { key: 15, tipo: 'despesa', valor: 320 },
-        { key: 16, tipo: 'receita', valor: 100 },
-    ])
+    const [balance, setBalance] = useState(0);
+    const [movies, setMovies] = useState([]);
+
+    const { user } = useContext(AuthContext);
+    const uid = user && user.uid;
+
+    useEffect(() => {
+        (async () => {
+            await firebase.database().ref("usuario").child(uid).on('value', (snapshot) => {
+                setBalance(snapshot.val().saldo)
+            })
+
+            await firebase.database().ref('historico').child(uid).orderByChild('date')
+                .equalTo(format(new Date(), 'dd/MM/yy'))
+                .limitToLast(10).on('value', (snapshot) => {
+                    setMovies([]);
+
+                    snapshot.forEach((childItem) => {
+                        let list = {
+                            key: childItem.key,
+                            tipo: childItem.val().tipo,
+                            valor: childItem.val().valor,
+                        }
+
+                        setMovies(oldArray => [...oldArray, list].reverse());
+                    });
+                })
+        })();
+    }, [])
 
     return (
         <SafeAreaView style={styles.container}>
@@ -33,7 +45,7 @@ export default function Home() {
             <Header />
 
             <Text style={styles.name}>{user && user.name}</Text>
-            <Text style={styles.balance}>R$1.764,90</Text>
+            <Text style={styles.balance}>R${balance.toFixed(2)}</Text>
 
             <Text style={styles.latestMovies}>Últimas movimentações</Text>
 

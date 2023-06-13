@@ -14,11 +14,7 @@ export default function New() {
     const { user: usuario } = useContext(AuthContext);
 
     const [value, setValue] = useState('');
-    const [type, setType] = useState(null);
-
-    // useEffect(() => {
-    //     console.log(usuario.uid)
-    // }, [])
+    const [type, setType] = useState('receita');
 
     function handleSubmit() {
         if (value === '' || type === null) {
@@ -50,7 +46,7 @@ export default function New() {
         await firebase.database().ref('historico').child(uid).child(key).set({
             tipo: type,
             valor: parseFloat(value),
-            date: format(new Date(), 'dd/MM/yyyy')
+            date: format(new Date(), 'dd/MM/yy')
         })
 
         // Atualizar saldo
@@ -65,6 +61,7 @@ export default function New() {
 
         Keyboard.dismiss();
         setValue('');
+        setType('receita');
         navigation.navigate('Home');
     }
 
