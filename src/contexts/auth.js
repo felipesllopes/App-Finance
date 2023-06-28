@@ -39,7 +39,7 @@ export default function AuthProvider({ children }) {
                         setUser(data);
                         storageUser(data);
                         setLoadingAuth(false);
-                    })
+                    }).catch((error) => { console.log(error) })
             })
             .catch((error) => {
                 console.log('Erro: ', error.code);
@@ -64,7 +64,7 @@ export default function AuthProvider({ children }) {
                         }
                         setUser(data);
                         storageUser(data);
-                    })
+                    }).catch((error) => { console.log(error) })
             })
             .catch((error) => {
                 console.log('Erro: ', error)

@@ -1,6 +1,5 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { useIsFocused } from '@react-navigation/native';
 import { format, isPast } from 'date-fns';
 import React, { useContext, useEffect, useState } from 'react';
 import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
@@ -18,39 +17,31 @@ export default function Home() {
     const [array, setArray] = useState([]);
     const [show, setShow] = useState(false);
     const [newDate, setNewDate] = useState(new Date());
-    const focused = useIsFocused();
 
     const { user } = useContext(AuthContext);
     const uid = user && user.uid;
 
     useEffect(() => {
-        (async () => {
-            firebase.database().ref("usuario").child(uid).on('value', (snapshot) => {
-                setBalance(snapshot.val().saldo)
+        firebase.database().ref("usuario").child(uid).on('value', (snapshot) => {
+            setBalance(snapshot.val().saldo)
+        })
+
+        firebase.database().ref('historico').child(uid).orderByChild('date')
+            .equalTo(format(newDate, 'dd/MM/yy'))
+            .limitToLast(10).on('value', (snapshot) => {
+                setMovies([]);
+
+                snapshot.forEach((childItem) => {
+                    let list = {
+                        key: childItem.key,
+                        tipo: childItem.val().tipo,
+                        valor: childItem.val().valor,
+                        date: childItem.val().date,
+                    }
+                    setMovies(oldArray => [...oldArray, list]);
+                });
             })
-
-            await firebase.database().ref('historico').child(uid).orderByChild('date')
-                .equalTo(format(newDate, 'dd/MM/yy'))
-                .limitToLast(10).once('value')
-                .then((snapshot) => {
-                    setMovies([]);
-
-                    snapshot.forEach((childItem) => {
-                        let list = {
-                            key: childItem.key,
-                            tipo: childItem.val().tipo,
-                            valor: childItem.val().valor,
-                            date: childItem.val().date,
-                        }
-                        setMovies(oldArray => [...oldArray, list]);
-                    });
-                    setArray(movies.slice().reverse());
-                })
-                .then(() => {
-                })
-        })();
-        console.log(newDate)
-    }, [focused, newDate])
+    }, [newDate])
 
     function handleDelete(data) {
 
@@ -109,15 +100,17 @@ export default function Home() {
             </View>
 
             <View style={styles.box}>
-                {array.length == 0 ? <Text style={styles.notBalance}>Você não tem nenhum registro nessa data!</Text> :
+
+                {movies.length == 0 ? <Text style={styles.notBalance}>Você não tem nenhum registro nessa data!</Text> :
                     <FlatList
                         style={{ margin: 10 }}
-                        data={array}
+                        data={movies}
                         keyExtractor={item => item.key}
                         renderItem={({ item }) => (<ListHistoric data={item} deleteItem={handleDelete} />)}
                         showsVerticalScrollIndicator={false}
                     />
                 }
+
             </View>
 
             {show &&
@@ -126,6 +119,7 @@ export default function Home() {
                     mode='date'
                     display='default'
                     onChange={closeHandleDate}
+                    maximumDate={new Date()}
                 />
             }
 
