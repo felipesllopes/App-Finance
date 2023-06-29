@@ -2,13 +2,14 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import Home from "../pages/Home";
 import New from "../pages/New";
 import Profile from "../pages/Profile";
+import CustomDrawer from "../components/CustomDrawer";
 
 const AppDrawer = createDrawerNavigator();
 
 export default function AppRoutes() {
     return (
         <AppDrawer.Navigator
-            useLegacyImplementation={true} // por atualização, é obrigatória a implementação dessa propriedade no Drawer
+            drawerContent={(props) => <CustomDrawer {...props} />}
 
             screenOptions={{
                 drawerActiveTintColor: 'white',
