@@ -44,7 +44,7 @@ export default function Register() {
                 autoCapitalize="none"
             />
 
-            <TouchableOpacity style={styles.button} onPress={handleRegister}>
+            <TouchableOpacity style={styles.button} onPress={handleRegister} activeOpacity={0.7}>
                 {loadingAuth ?
                     (<ActivityIndicator size={20} color={'#FFF'} />
                     ) : (

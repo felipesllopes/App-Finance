@@ -25,7 +25,7 @@ export default function CustomDrawer(props) {
             <DrawerItem
                 {...props}
                 style={styles.drawerButton}
-                label='Sair do app'
+                label={() => <Text style={styles.textLabel}>Sair do app</Text>}
                 onPress={() => signOut()}
             />
 
@@ -57,5 +57,11 @@ const styles = StyleSheet.create({
     },
     drawerButton: {
         backgroundColor: 'red',
+        marginTop: 30,
+    },
+    textLabel: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'center',
     },
 })

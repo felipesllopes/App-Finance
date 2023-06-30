@@ -1,6 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { createContext, useEffect, useState } from "react";
+import { Alert } from "react-native";
 import firebase from "../services/firebaseConnection";
+import AlertMessage from "./alertMessage";
 
 export const AuthContext = createContext({});
 
@@ -22,8 +24,18 @@ export default function AuthProvider({ children }) {
         setLoading(false);
     }, []);
 
-    // Logar usuario
+    /**
+     * Function to login user
+     * @param {*} email 
+     * @param {*} password 
+     */
     async function signIn(email, password) {
+
+        if (email === '' || password === '') {
+            Alert.alert('Preencha os campos!', 'Preencha todos os campos para fazer o login.');
+            return
+        }
+
         setLoadingAuth(true);
         await firebase.auth().signInWithEmailAndPassword(email, password)
             .then(async (value) => {
@@ -38,16 +50,30 @@ export default function AuthProvider({ children }) {
                         setUser(data);
                         storageUser(data);
                         setLoadingAuth(false);
-                    }).catch((error) => { console.log(error) })
+                    }).catch((error) => AlertMessage(error))
             })
             .catch((error) => {
-                console.log('Erro: ', error.code);
+                AlertMessage(error);
                 setLoadingAuth(false);
             })
     }
 
-    // cadastrar usuario
+    /**
+     * Function to register user.
+     * @param {*} email 
+     * @param {*} password 
+     * @param {*} name 
+     */
     async function signUp(email, password, name) {
+
+        if (email === '', password === '', name === '') {
+            Alert.alert(
+                'Preencha os campos!',
+                'Preencha todos os campos para se registrar'
+            )
+            return;
+        }
+
         await firebase.auth().createUserWithEmailAndPassword(email, password)
             .then(async (value) => {
                 let uid = value.user.uid;
@@ -63,24 +89,46 @@ export default function AuthProvider({ children }) {
                         }
                         setUser(data);
                         storageUser(data);
-                    }).catch((error) => { console.log(error) })
+                    }
+                    ).catch((error) => {
+                        AlertMessage(error);
+                    })
             })
             .catch((error) => {
-                console.log('Erro: ', error)
-                alert("Senha fraca. Tente uma senha com 6 caracteres")
+                AlertMessage(error);
             })
     }
 
+    /**
+     * Function to disconnect user.
+     */
     async function signOut() {
-        await firebase.auth().signOut();
-        await AsyncStorage.clear()
-            .then(() => { setUser(null) })
-            .catch((error) => { console.log('Error: ', error) })
+
+        Alert.alert(
+            'Sair',
+            'Deseja sair do app?',
+            [
+                { text: 'Cancelar', style: 'cancel', },
+                { text: 'Sair', onPress: sair }
+            ]
+        )
+        async function sair() {
+            await firebase.auth().signOut();
+            await AsyncStorage.clear()
+                .then(() => {
+                    setUser(null)
+                })
+                .catch((error) => AlertMessage(error))
+        }
     }
 
+    /**
+     * Function to use asyncStorage
+     * @param {*} data 
+     */
     async function storageUser(data) {
         await AsyncStorage.setItem('Auth_user', JSON.stringify(data))
-            .catch((error) => { console.log(error) })
+            .catch((error) => AlertMessage(error))
     }
 
     return (

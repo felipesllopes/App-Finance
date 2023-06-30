@@ -41,7 +41,7 @@ export default function Login() {
                 autoCapitalize="none"
             />
 
-            <TouchableOpacity style={styles.button} onPress={handleLogin}>
+            <TouchableOpacity style={styles.button} onPress={handleLogin} activeOpacity={0.7}>
                 {loadingAuth ?
                     (<ActivityIndicator size={20} color={'#FFF'} />
                     ) : (

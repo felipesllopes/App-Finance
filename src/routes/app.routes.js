@@ -20,7 +20,7 @@ export default function AppRoutes() {
                 drawerLabelStyle: {
                     fontSize: 20,
                     fontWeight: 'bold',
-                    color: 'white',
+                    color: '#FFF',
                 },
                 drawerItemStyle: {
                     marginVertical: 5,
