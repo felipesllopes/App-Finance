@@ -18,13 +18,14 @@ export default function Profile() {
             <Text style={styles.name}>{user && user.name}</Text>
 
             <TouchableOpacity
+                activeOpacity={0.7}
                 onPress={() => navigation.navigate('New')}
                 style={[styles.button, { backgroundColor: '#00FF00' }]}
             >
                 <Text style={styles.textButton}>Registrar gasto</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => signOut()} style={styles.button}>
+            <TouchableOpacity onPress={() => signOut()} style={styles.button} activeOpacity={0.7}>
                 <Text style={styles.textButton}>Sair</Text>
             </TouchableOpacity>
 

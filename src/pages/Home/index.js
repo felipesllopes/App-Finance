@@ -1,8 +1,8 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { format, isPast } from 'date-fns';
+import { format } from 'date-fns';
 import React, { useContext, useEffect, useState } from 'react';
-import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../../components/Header';
@@ -14,9 +14,9 @@ export default function Home() {
 
     const [balance, setBalance] = useState(0);
     const [movies, setMovies] = useState([]);
-    const [array, setArray] = useState([]);
     const [show, setShow] = useState(false);
     const [newDate, setNewDate] = useState(new Date());
+    const [loading, setLoading] = useState(true);
 
     let formattedBalance = balance.toLocaleString('pt-BR', { minimumFractionDigits: 2 })
 
@@ -42,16 +42,11 @@ export default function Home() {
                     }
                     setMovies(oldArray => [...oldArray, list]);
                 });
+                setLoading(false);
             })
     }, [newDate])
 
     function handleDelete(data) {
-
-        if (isPast(new Date(data.date))) {
-            // irá entrar aqui se a data for antiga
-            alert("Você não pode excluir um registro antigo.");
-            return;
-        }
 
         Alert.alert(
             'Atenção!',
@@ -105,14 +100,20 @@ export default function Home() {
             </View>
 
             <View style={styles.box}>
-                {movies.length == 0 ? <Text style={styles.notBalance}>Você não tem nenhuma movimentação nesta data.</Text> :
-                    <FlatList
-                        style={{ margin: 10 }}
-                        data={movies}
-                        keyExtractor={item => item.key}
-                        renderItem={({ item }) => (<ListHistoric data={item} deleteItem={handleDelete} />)}
-                        showsVerticalScrollIndicator={false}
-                    />
+                {loading === true ?
+                    <ActivityIndicator size={40} color={'green'} style={styles.loading} />
+                    :
+                    <View>
+                        {movies.length == 0 ? <Text style={styles.notBalance}>Você não tem nenhuma movimentação nesta data.</Text> :
+                            <FlatList
+                                style={{ margin: 10 }}
+                                data={movies}
+                                keyExtractor={item => item.key}
+                                renderItem={({ item }) => (<ListHistoric data={item} deleteItem={handleDelete} />)}
+                                showsVerticalScrollIndicator={false}
+                            />
+                        }
+                    </View>
                 }
             </View>
 
@@ -175,5 +176,9 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#FFF',
         borderRadius: 16,
-    }
+    },
+    loading: {
+        marginTop: 60,
+        alignItems: 'center',
+    },
 })

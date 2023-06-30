@@ -16,9 +16,18 @@ export default function New() {
     const [value, setValue] = useState('');
     const [type, setType] = useState('receita');
 
+    /**
+     * Function to register finance
+     * @returns
+     */
     function handleSubmit() {
         if (value === '' || type === null) {
             alert("Preencha os campos")
+            return;
+        }
+
+        if (parseFloat(value) <= 0) {
+            alert("Digite um valor válido")
             return;
         }
 
@@ -38,10 +47,13 @@ export default function New() {
         )
     }
 
+    /**
+     * Function to confirm finance
+     */
     async function handleAdd() {
         let uid = await usuario.uid;
 
-        let key = await firebase.database().ref('historico').child(uid).push().key;
+        let key = firebase.database().ref('historico').child(uid).push().key;
 
         await firebase.database().ref('historico').child(uid).child(key).set({
             tipo: type,
@@ -80,7 +92,7 @@ export default function New() {
 
             <PickerSelect onChange={setType} type={type} />
 
-            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+            <TouchableOpacity style={styles.button} onPress={handleSubmit} activeOpacity={0.7}>
                 <Text style={styles.textButton}>Registrar</Text>
             </TouchableOpacity>
 
