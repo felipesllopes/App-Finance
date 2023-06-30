@@ -1,8 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { useContext, useState } from "react";
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { AuthContext } from "../../contexts/auth";
-import { ActivityIndicator } from "react-native";
 
 export default function Login() {
 
@@ -18,6 +17,8 @@ export default function Login() {
 
     return (
         <View style={styles.container}>
+
+            <Text style={styles.tittle}>Minhas Finanças</Text>
 
             <Image source={require('../../assets/Logo.png')} style={styles.image} />
 
@@ -61,15 +62,23 @@ export default function Login() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
+        // justifyContent: 'center',
         backgroundColor: '#363636',
         padding: 15
+    },
+    tittle: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        color: '#00FF00',
+        marginTop: 25,
+        marginBottom: 50,
+        textAlign: 'center',
     },
     image: {
         height: 114,
         width: 140,
         alignSelf: 'center',
-        marginBottom: 80,
+        marginBottom: 60,
     },
     textInput: {
         backgroundColor: '#242424',

@@ -1,8 +1,11 @@
+import { useNavigation } from "@react-navigation/native";
 import { useContext, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { AuthContext } from "../../contexts/auth";
 
 export default function Register() {
+
+    const navigation = useNavigation();
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -53,6 +56,10 @@ export default function Register() {
                 }
             </TouchableOpacity>
 
+            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                <Text style={styles.textAccount}>Já tenho uma conta</Text>
+            </TouchableOpacity>
+
         </View>
     )
 }
@@ -62,13 +69,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         backgroundColor: '#363636',
-        padding: 15
-    },
-    image: {
-        height: 114,
-        width: 140,
-        alignSelf: 'center',
-        marginBottom: 80,
+        padding: 15,
+        paddingTop: 50,
     },
     textInput: {
         backgroundColor: '#242424',
@@ -92,4 +94,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#363636',
     },
+    textAccount: {
+        color: '#FFF',
+        fontSize: 16,
+        textAlign: 'center',
+        marginTop: 15,
+    }
 })

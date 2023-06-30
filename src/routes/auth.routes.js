@@ -10,15 +10,7 @@ export default function AuthRoutes() {
 
             <AuthStack.Screen name="Login" component={Login} options={{ headerShown: false }} />
 
-            <AuthStack.Screen name="Logout" component={Register}
-                options={{
-                    headerStyle: {
-                        backgroundColor: '#242424'
-                    },
-                    headerTintColor: '#00FF00',
-                    title: 'Voltar'
-                }}
-            />
+            <AuthStack.Screen name="Logout" component={Register} options={{ headerShown: false }} />
 
         </AuthStack.Navigator>
     )
