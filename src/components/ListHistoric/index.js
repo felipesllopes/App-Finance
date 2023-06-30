@@ -1,7 +1,11 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function ListHistoric({ data, deleteItem }) {
+
+    let balance = data.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+
     return (
         <TouchableOpacity style={styles.container} activeOpacity={0.7} onLongPress={() => deleteItem(data)}>
 
@@ -10,7 +14,7 @@ export default function ListHistoric({ data, deleteItem }) {
                 <Text style={styles.text}>{data.tipo}</Text>
             </View>
 
-            <Text style={styles.value}>R$ {data.valor.toFixed(2)}</Text>
+            <Text style={styles.value}>R$ {balance}</Text>
         </TouchableOpacity>
     )
 }

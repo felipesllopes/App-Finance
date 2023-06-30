@@ -18,6 +18,8 @@ export default function Home() {
     const [show, setShow] = useState(false);
     const [newDate, setNewDate] = useState(new Date());
 
+    let formattedBalance = balance.toLocaleString('pt-BR', { minimumFractionDigits: 2 })
+
     const { user } = useContext(AuthContext);
     const uid = user && user.uid;
 
@@ -90,18 +92,20 @@ export default function Home() {
             <Header />
 
             <Text style={styles.name}>{user && user.name}</Text>
-            <Text style={styles.balance}>R${balance.toFixed(2)}</Text>
+            <Text style={styles.balance}>R${formattedBalance}</Text>
 
-            <View style={{ flexDirection: 'row', marginBottom: 5, }}>
+            <View style={styles.movements}>
                 <Text style={styles.latestMovies}>Últimas movimentações</Text>
-                <TouchableOpacity onPress={handleDate} activeOpacity={0.7}>
+
+                <TouchableOpacity onPress={handleDate} activeOpacity={0.7} style={{ marginHorizontal: 7 }}>
                     <Ionicons name='calendar-outline' size={25} color={'white'} />
                 </TouchableOpacity>
+
+                <Text style={styles.date}>{format(newDate, 'dd/MM/yyyy')}</Text>
             </View>
 
             <View style={styles.box}>
-
-                {movies.length == 0 ? <Text style={styles.notBalance}>Você não tem nenhum registro nessa data!</Text> :
+                {movies.length == 0 ? <Text style={styles.notBalance}>Você não tem nenhuma movimentação nesta data.</Text> :
                     <FlatList
                         style={{ margin: 10 }}
                         data={movies}
@@ -110,7 +114,6 @@ export default function Home() {
                         showsVerticalScrollIndicator={false}
                     />
                 }
-
             </View>
 
             {show &&
@@ -136,17 +139,22 @@ const styles = StyleSheet.create({
     name: {
         fontSize: 20,
         color: '#FFF',
-        marginTop: 40,
+        marginTop: 30,
         fontStyle: 'italic'
     },
     balance: {
         fontSize: 22,
         color: '#FFF',
         fontWeight: 'bold',
-        marginBottom: 40,
+        marginBottom: 30,
+    },
+    movements: {
+        flexDirection: 'row',
+        marginBottom: 6,
+        alignItems: 'center',
     },
     notBalance: {
-        marginTop: 100,
+        marginTop: 40,
         textAlign: 'center',
         fontSize: 17,
         fontStyle: 'italic',
@@ -156,7 +164,12 @@ const styles = StyleSheet.create({
         color: '#00FF00',
         marginLeft: 10,
         marginBottom: 4,
-        marginRight: 10,
+    },
+    date: {
+        backgroundColor: '#FFF',
+        padding: 1,
+        borderRadius: 4,
+        paddingHorizontal: 3
     },
     box: {
         flex: 1,
